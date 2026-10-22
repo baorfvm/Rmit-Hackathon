@@ -133,7 +133,7 @@ function updateMeter() {
   $('#meter-fill').style.width = `${Math.min(count / 2, 1) * 100}%`;
   const button = $('#attempt-unlock');
   button.disabled = count < 2;
-  button.textContent = count < 2 ? 'Quorum not met · unlock blocked' : 'Issue one scoped ephemeral key';
+  button.textContent = count < 2 ? 'Denied · waiting for other admins' : 'Other admins approved · issue scoped key';
 }
 
 async function initTideCloak() {
@@ -180,7 +180,7 @@ $$('.approvers button').forEach((button) => button.addEventListener('click', () 
   const name = button.dataset.approver;
   if (approvals.has(name)) approvals.delete(name); else approvals.add(name);
   button.classList.toggle('approved', approvals.has(name));
-  button.querySelector('i').textContent = approvals.has(name) ? 'Signed ✓' : 'Approve';
+  button.querySelector('i').textContent = approvals.has(name) ? 'Remote signature received ✓' : 'Simulate remote approval';
   addAudit(approvals.has(name) ? 'Quorum signature recorded' : 'Quorum signature withdrawn', `${name} · request ${$('#ticket').value}`, approvals.has(name) ? 'blue' : '');
   updateMeter();
 }));
@@ -210,9 +210,9 @@ function runGuidedTour() {
     { at: 45, no: '05', title: 'Scope beats privilege', copy: 'The same authenticated operator requests restricted Zone B. Authentication alone is not authority.', action: () => selectScenario('denied') },
     { at: 52, no: '06', title: 'No key is released', copy: 'The camera ACL fails, access is denied, and the attempted request becomes a sealed audit event.', action: () => $('#request-btn').click() },
     { at: 64, no: '07', title: 'The god-mode test', copy: 'A system administrator tries to force-unlock all cameras. In a conventional system, this is where policy can be bypassed.', action: () => selectScenario('override') },
-    { at: 71, no: '08', title: 'TideCloak blocks unilateral control', copy: 'The override is captured but cannot execute. Emergent Authority requires two independent approvals.', action: () => $('#request-btn').click() },
-    { at: 80, no: '09', title: 'One signature is not authority', copy: 'The Security Director approves. The request remains blocked because the threshold has not been met.', action: () => $$('.approvers button')[0].click() },
-    { at: 88, no: '10', title: 'Authority emerges at quorum', copy: 'Civil Oversight independently approves. Two of three keyholders now align, allowing one scoped action - not a permanent master key.', action: () => $$('.approvers button')[1].click() },
+    { at: 71, no: '08', title: 'TideCloak denies unilateral control', copy: 'The requesting administrator cannot approve their own override. Two other admins must respond from separate TideCloak sessions.', action: () => $('#request-btn').click() },
+    { at: 80, no: '09', title: 'One remote approval is not enough', copy: 'The Security Director approves from their own device. The requesting admin remains blocked because the threshold is not met.', action: () => $$('.approvers button')[0].click() },
+    { at: 88, no: '10', title: 'A second admin completes quorum', copy: 'Civil Oversight independently approves from another session. Only now may the requesting admin issue one scoped key.', action: () => $$('.approvers button')[1].click() },
     { at: 96, no: '11', title: 'Scoped access, never global power', copy: 'The quorum can issue one temporary Zone B key. Every signature and key release is recorded.', action: () => $('#attempt-unlock').click() },
     { at: 104, no: '12', title: 'Accountability by default', copy: 'The event chain preserves approvals, denials, and access windows. An override attempt cannot disappear inside an admin console.', action: () => $('#audit').scrollIntoView({ behavior: 'smooth', block: 'center' }) },
     { at: 114, no: '13', title: 'What changes', copy: 'With TideCloak, the city can protect people without asking them to blindly trust whoever holds the master password.', action: () => document.querySelector('.closing').scrollIntoView({ behavior: 'smooth', block: 'center' }) },

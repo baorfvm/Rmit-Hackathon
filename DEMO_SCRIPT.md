@@ -22,9 +22,9 @@ Select **Out-of-scope**, then **Test policy boundary**.
 
 Select **Admin override**, then **Force unlock all cameras**.
 
-“A system administrator tries the classic god-mode shortcut. CivicShield captures the request but cannot execute it. Select one approver: the request remains blocked. Select a second independent approver: only now does authority emerge.”
+“A system administrator tries the classic god-mode shortcut. CivicShield denies unilateral access: the requesting admin cannot approve their own request. A separate Security Director approves from their TideCloak session, but the request remains blocked. Only after Civil Oversight independently approves from another session does authority emerge.”
 
-Select two approvers, then issue the scoped key.
+Use the demo controls to simulate two remote approvals arriving from the other administrators' separate devices, then issue the scoped key.
 
 ## 1:32–1:48 — Auditability
 

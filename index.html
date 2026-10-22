@@ -153,15 +153,16 @@
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <button id="modal-close" class="modal-close" aria-label="Close">×</button>
         <p class="section-label">EMERGENT AUTHORITY</p><h2 id="modal-title">No administrator can do this alone.</h2>
-        <p>A force-unlock request has been captured, not executed. Two independent approvals must align before a scoped key can exist.</p>
+        <p>This administrator has been denied unilateral access. The request stays blocked until two other administrators approve from their own TideCloak sessions.</p>
+        <div class="requester-lockout"><span>×</span><div><b>Requesting admin cannot approve</b><small>Alex Morgan is excluded from this approval quorum.</small></div></div>
         <div class="quorum-meter"><span id="meter-fill"></span></div><div class="meter-label"><b id="meter-count">0 of 2 approvals</b><span>Threshold · 2/3</span></div>
         <div class="approvers">
-          <button data-approver="Security Director"><span class="approver-avatar">SD</span><span><b>Security Director</b><small>Independent keyholder</small></span><i>Approve</i></button>
-          <button data-approver="Civil Oversight"><span class="approver-avatar">CO</span><span><b>Civil Oversight</b><small>External representative</small></span><i>Approve</i></button>
-          <button data-approver="Privacy Officer"><span class="approver-avatar">PO</span><span><b>Privacy Officer</b><small>Policy council</small></span><i>Approve</i></button>
+          <button data-approver="Security Director"><span class="approver-avatar">SD</span><span><b>Security Director</b><small>Waiting on their TideCloak session</small></span><i>Simulate remote approval</i></button>
+          <button data-approver="Civil Oversight"><span class="approver-avatar">CO</span><span><b>Civil Oversight</b><small>Waiting on their TideCloak session</small></span><i>Simulate remote approval</i></button>
+          <button data-approver="Privacy Officer"><span class="approver-avatar">PO</span><span><b>Privacy Officer</b><small>Waiting on their TideCloak session</small></span><i>Simulate remote approval</i></button>
         </div>
         <button id="attempt-unlock" class="primary-action" disabled>Quorum not met · unlock blocked</button>
-        <p class="modal-foot">For the demo, select two independent approvers to simulate threshold signatures.</p>
+        <p class="modal-foot">Demo control: each action simulates a signature arriving from that administrator's separate device and session.</p>
       </div>
     </div>
 
