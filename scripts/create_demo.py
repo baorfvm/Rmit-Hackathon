@@ -1,80 +1,66 @@
-"""Create a silent two-minute submission video with on-screen demo narration."""
+"""Build the captioned two-minute demo from verified CivicShield UI captures."""
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import imageio_ffmpeg
 
 W, H, FPS = 1280, 720, 10
-EGG, CLOUD, PAPER, GRAPHITE, QUIET, BLUE = '#fdfcfb', '#f7f7f7', '#f0f0ea', '#2e2e2e', '#6a6972', '#207dff'
+QUIET, BLUE = '#dadada', '#6da7ff'
 FONT = '/System/Library/Fonts/Supplemental/Arial.ttf'
 BOLD = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
 
 def font(size, bold=False):
     return ImageFont.truetype(BOLD if bold else FONT, size)
 
-def wrap(draw, text, f, width):
-    words, lines, line = text.split(), [], ''
-    for word in words:
-        trial = f'{line} {word}'.strip()
-        if draw.textbbox((0, 0), trial, font=f)[2] <= width: line = trial
-        else: lines.append(line); line = word
-    if line: lines.append(line)
-    return lines
+def cover(image):
+    scale = max(W / image.width, H / image.height)
+    size = (round(image.width * scale), round(image.height * scale))
+    image = image.resize(size, Image.Resampling.LANCZOS)
+    x, y = (size[0] - W) // 2, (size[1] - H) // 2
+    return image.crop((x, y, x + W, y + H))
 
-def text_block(draw, text, xy, f, color, width, spacing=10):
-    x, y = xy
-    for line in wrap(draw, text, f, width):
-        draw.text((x, y), line, font=f, fill=color)
-        y += f.size + spacing
-    return y
-
-slides = [
-    (0, 15, 'THE POSSIBILITY', 'Municipal CCTV access without a master key.', 'CivicShield lets useful authority appear for one justified request - without giving any administrator, cloud, or vendor unilateral power over the city.'),
-    (15, 38, 'SCENARIO 01 - STANDARD ACCESS', 'Identity. Purpose. Scope. Time.', 'Maya requests Zone A under incident INC-2026-001. OIDC identity, the camera ACL, the ticket, and the DPoP device proof align. A 15-minute key is issued only to her device.'),
-    (38, 58, 'SCENARIO 02 - OUT OF SCOPE', 'A valid login is not a master key.', 'The same verified operator requests restricted Zone B. The scoped ACL fails. Tide authority releases no key, and the denial becomes a sealed audit event.'),
-    (58, 92, 'SCENARIO 03 - ADMIN OVERRIDE', 'No administrator can act alone.', 'A system administrator attempts Force Unlock All Cameras. The request is captured, not executed. One approval remains blocked. At two independent approvals, authority emerges for one scoped action.'),
-    (92, 108, 'ACCOUNTABILITY', 'Every decision leaves a receipt.', 'Requests, denials, signatures, issued keys, and viewing windows form a tamper-evident chain. An attempted override cannot disappear inside an admin console.'),
-    (108, 120, 'WHAT CHANGES', 'Protect the city. Protect the people in it.', 'With TideCloak, public safety no longer depends on whoever holds the master password. The server stores video - but never holds the power to reveal it.'),
+segments = [
+    (12, 'tmp-hero.png', '01  THE POSSIBILITY', 'Useful municipal CCTV access without a master key.', 'CivicShield protects public safety without giving an administrator, cloud, or vendor unilateral power over the city.'),
+    (12, 'tmp-architecture.png', '02  THE TRUST CONSTRAINT', 'One privileged account can expose everyone.', 'Conventional systems keep reusable authority in the backend. TideCloak keeps cryptographic authority outside any one server.'),
+    (14, 'tmp-standard.png', '03  STANDARD REQUEST', 'Identity, purpose, scope, and time must align.', 'Maya presents an OIDC identity, incident ticket, Zone A ACL, time window, and DPoP device proof.'),
+    (15, 'tmp-granted.png', '04  POLICY-APPROVED ACCESS', 'One camera. One device. Fifteen minutes.', 'TideCloak releases an ephemeral, device-bound key. Decryption happens locally; the cloud keeps only ciphertext.'),
+    (10, 'tmp-denied.png', '05  OUT-OF-SCOPE DENIAL', 'A valid login is not a master key.', 'The same operator requests restricted Zone B. The ACL fails, no key is released, and the denial becomes evidence.'),
+    (10, 'tmp-quorum0.png', '06  THE GOD-MODE TEST', 'The administrator tries Force Unlock All Cameras.', 'TideCloak captures the override but cannot execute it. Emergent Authority requires independent agreement.'),
+    (10, 'tmp-quorum1.png', '07  ONE APPROVAL', 'One signature is still not authority.', 'The Security Director approves, but the action remains blocked because the 2-of-3 threshold is not met.'),
+    (8, 'tmp-quorum2.png', '08  QUORUM REACHED', 'Two independent keyholders align.', 'Civil Oversight adds the second signature. Authority emerges for one action - never as a permanent master key.'),
+    (10, 'tmp-quorum-granted.png', '09  SCOPED UNLOCK', 'The quorum issues one temporary Zone B key.', 'The key is sealed to the approved context and device. Every approval and release is recorded.'),
+    (10, 'tmp-audit.png', '10  ACCOUNTABILITY', 'Every decision leaves a verifiable receipt.', 'Approvals, denials, issued keys, and viewing windows form a tamper-evident chain. Override attempts cannot disappear.'),
+    (9, 'tmp-closing.png', '11  WHAT CHANGES', 'Protect the city. Protect the people in it.', 'With TideCloak, public safety no longer depends on blindly trusting whoever holds the master password.'),
 ]
 
-def frame_at(t):
-    slide = next(s for s in slides if s[0] <= t < s[1])
-    start, end, label, title, body = slide
-    p = (t - start) / (end - start)
-    im = Image.new('RGB', (W, H), EGG)
-    d = ImageDraw.Draw(im)
-    d.rectangle((0, 0, W, 70), fill=EGG)
-    d.line((0, 69, W, 69), fill='#e9e5df', width=1)
-    d.rectangle((38, 24, 48, 47), fill=GRAPHITE)
-    d.text((62, 24), 'CivicShield', font=font(22, True), fill=GRAPHITE)
-    d.text((1010, 27), 'RMIT UNLOCKED  /  2026', font=font(12, True), fill=QUIET)
-    d.rounded_rectangle((72, 120, 1208, 626), radius=18, fill=CLOUD)
-    d.rounded_rectangle((106, 158, 720, 586), radius=14, fill=EGG, outline='#e4ded3')
-    d.text((146, 201), label, font=font(13, True), fill=BLUE)
-    y = text_block(d, title, (146, 246), font(44, True), GRAPHITE, 520, 8)
-    text_block(d, body, (146, y + 24), font(21), QUIET, 505, 10)
-    # Trust-flow visual panel
-    d.rounded_rectangle((748, 158, 1174, 586), radius=14, fill=PAPER)
-    nodes = [('CAMERA EDGE', 'Encrypted'), ('BLIND VAULT', 'Ciphertext'), ('TIDE AUTHORITY', 'Policy + quorum'), ('BOUND DEVICE', '15-minute key')]
-    for i, (a, b) in enumerate(nodes):
-        yy = 198 + i * 90
-        active = min(3, int(p * 4.2)) >= i
-        color = BLUE if active else '#b8b5ae'
-        d.ellipse((784, yy, 818, yy + 34), fill=color)
-        d.text((796, yy + 7), str(i + 1), font=font(13, True), fill='white')
-        d.text((838, yy), a, font=font(13, True), fill=GRAPHITE)
-        d.text((838, yy + 23), b, font=font(15), fill=QUIET)
-        if i < 3: d.line((801, yy + 36, 801, yy + 84), fill='#d6d1c8', width=2)
-    # Progress
-    d.line((72, 667, 1208, 667), fill='#e4ded3', width=4)
-    d.line((72, 667, 72 + int(1136 * t / 120), 667), fill=BLUE, width=4)
-    d.text((72, 681), f'{int(t)//60}:{int(t)%60:02d}', font=font(12), fill=QUIET)
-    d.text((1168, 681), '2:00', font=font(12), fill=QUIET)
-    return im
+assert sum(s[0] for s in segments) == 120
+loaded = {name: cover(Image.open(name).convert('RGB')) for _, name, *_ in segments}
+
+def frame(image, label, title, copy, local_p, global_t):
+    zoom = 1 + .012 * local_p
+    zw, zh = round(W * zoom), round(H * zoom)
+    moving = image.resize((zw, zh), Image.Resampling.LANCZOS)
+    x = round((zw - W) * (.25 + .5 * local_p))
+    y = round((zh - H) * .45)
+    canvas = moving.crop((x, y, x + W, y + H)).convert('RGBA')
+    overlay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(overlay)
+    d.rounded_rectangle((54, 535, 1226, 690), radius=14, fill=(38, 38, 38, 242))
+    d.text((82, 558), label, font=font(13, True), fill=BLUE)
+    d.text((82, 584), title, font=font(25, True), fill='white')
+    d.text((82, 625), copy, font=font(15), fill=QUIET)
+    d.line((82, 670, 1198, 670), fill=(255, 255, 255, 45), width=3)
+    d.line((82, 670, 82 + int(1116 * global_t / 120), 670), fill=BLUE, width=3)
+    d.text((1138, 548), f'{int(global_t)//60}:{int(global_t)%60:02d}', font=font(12, True), fill=(255,255,255,180))
+    return Image.alpha_composite(canvas, overlay).convert('RGB')
 
 out = Path('demo.mp4')
-writer = imageio_ffmpeg.write_frames(str(out), (W, H), fps=FPS, codec='libx264', pix_fmt_out='yuv420p', output_params=['-crf', '27', '-preset', 'veryfast', '-movflags', '+faststart'])
+writer = imageio_ffmpeg.write_frames(str(out), (W, H), fps=FPS, codec='libx264', pix_fmt_out='yuv420p', output_params=['-crf', '23', '-preset', 'veryfast', '-movflags', '+faststart'])
 writer.send(None)
-for n in range(120 * FPS):
-    writer.send(frame_at(n / FPS).tobytes())
+elapsed = 0
+for duration, name, label, title, copy in segments:
+    for n in range(duration * FPS):
+        t = elapsed + n / FPS
+        writer.send(frame(loaded[name], label, title, copy, n / (duration * FPS), t).tobytes())
+    elapsed += duration
 writer.close()
 print(out.resolve(), out.stat().st_size)

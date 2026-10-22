@@ -199,3 +199,33 @@ setInterval(() => {
 
 selectScenario('standard');
 initTideCloak();
+
+function runGuidedTour() {
+  const caption = $('#tour-caption');
+  const steps = [
+    { at: 0, no: '01', title: 'The possibility', copy: 'CivicShield gives investigators useful CCTV access without giving any administrator, cloud, or vendor a master key.', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+    { at: 12, no: '02', title: 'The trust constraint', copy: 'Today, one privileged account can bypass policy and expose an entire city. That makes centralised surveillance too powerful to trust.', action: () => $('#workspace').scrollIntoView({ behavior: 'smooth', block: 'start' }) },
+    { at: 24, no: '03', title: 'Authorized access', copy: 'Maya presents an OIDC identity, incident purpose, Zone A scope, and a DPoP device proof. All four conditions align.', action: () => selectScenario('standard') },
+    { at: 32, no: '04', title: 'A key for one context', copy: 'TideCloak releases a 15-minute ephemeral key bound to this camera and this device. The cloud still holds only ciphertext.', action: () => $('#request-btn').click() },
+    { at: 45, no: '05', title: 'Scope beats privilege', copy: 'The same authenticated operator requests restricted Zone B. Authentication alone is not authority.', action: () => selectScenario('denied') },
+    { at: 52, no: '06', title: 'No key is released', copy: 'The camera ACL fails, access is denied, and the attempted request becomes a sealed audit event.', action: () => $('#request-btn').click() },
+    { at: 64, no: '07', title: 'The god-mode test', copy: 'A system administrator tries to force-unlock all cameras. In a conventional system, this is where policy can be bypassed.', action: () => selectScenario('override') },
+    { at: 71, no: '08', title: 'TideCloak blocks unilateral control', copy: 'The override is captured but cannot execute. Emergent Authority requires two independent approvals.', action: () => $('#request-btn').click() },
+    { at: 80, no: '09', title: 'One signature is not authority', copy: 'The Security Director approves. The request remains blocked because the threshold has not been met.', action: () => $$('.approvers button')[0].click() },
+    { at: 88, no: '10', title: 'Authority emerges at quorum', copy: 'Civil Oversight independently approves. Two of three keyholders now align, allowing one scoped action - not a permanent master key.', action: () => $$('.approvers button')[1].click() },
+    { at: 96, no: '11', title: 'Scoped access, never global power', copy: 'The quorum can issue one temporary Zone B key. Every signature and key release is recorded.', action: () => $('#attempt-unlock').click() },
+    { at: 104, no: '12', title: 'Accountability by default', copy: 'The event chain preserves approvals, denials, and access windows. An override attempt cannot disappear inside an admin console.', action: () => $('#audit').scrollIntoView({ behavior: 'smooth', block: 'center' }) },
+    { at: 114, no: '13', title: 'What changes', copy: 'With TideCloak, the city can protect people without asking them to blindly trust whoever holds the master password.', action: () => document.querySelector('.closing').scrollIntoView({ behavior: 'smooth', block: 'center' }) },
+  ];
+  document.body.classList.add('tour-mode');
+  caption.classList.add('show');
+  steps.forEach((step) => setTimeout(() => {
+    $('#tour-step').textContent = step.no;
+    $('#tour-title').textContent = step.title;
+    $('#tour-copy').textContent = step.copy;
+    step.action();
+  }, step.at * 1000));
+  setTimeout(() => caption.classList.remove('show'), 119500);
+}
+
+if (new URLSearchParams(location.search).get('tour') === '1') setTimeout(runGuidedTour, 800);

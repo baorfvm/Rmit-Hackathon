@@ -54,6 +54,8 @@ The on-screen 2-of-3 quorum interaction is a transparent prototype simulation. I
 - Architecture notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Demo video target: `demo.mp4` (under GitHub's 100 MB file limit)
 
+To run the automated two-minute walkthrough used for the submission video, open `/?tour=1` while the development server is running.
+
 ## Build and verify
 
 ```bash
