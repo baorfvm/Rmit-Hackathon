@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fdfcfb" />
+    <meta name="description" content="CivicShield - municipal CCTV access without a master key." />
+    <title>CivicShield | Trust without a master key</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to workspace</a>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="CivicShield home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>CivicShield</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#workspace">Workspace</a><a href="#architecture">How it works</a><a href="#audit">Audit</a>
+      </nav>
+      <div class="session-actions">
+        <span id="auth-state" class="status-pill"><span class="status-dot"></span> Demo realm</span>
+        <button id="login-btn" class="pill-btn compact">Connect TideCloak</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="eyebrow-switch"><span class="active">Municipal operations</span><span>Emergent Authority</span></div>
+        <p class="kicker">NO MASTER KEY · NO GOD MODE</p>
+        <h1 id="hero-title">A city can watch over people<br />without watching over <em>everyone.</em></h1>
+        <p class="hero-copy">CivicShield keeps every camera encrypted at the source. Access appears only when identity, purpose, policy, and—when needed—independent approval align.</p>
+        <div class="hero-actions">
+          <a class="pill-btn" href="#workspace">Run the live prototype <span>↓</span></a>
+          <a class="text-link" href="#architecture">See the trust model →</a>
+        </div>
+        <div class="promise-row" aria-label="System guarantees">
+          <span><b>00</b> master keys</span><span><b>15m</b> scoped access</span><span><b>2/3</b> sensitive-zone quorum</span><span><b>100%</b> logged events</span>
+        </div>
+      </section>
+
+      <section id="workspace" class="workspace-section" aria-labelledby="workspace-title">
+        <div class="section-heading">
+          <div><p class="section-label">LIVE PROTOTYPE · SYNTHETIC DATA</p><h2 id="workspace-title">One request. Four proofs.</h2></div>
+          <p>Choose a scenario and watch policy—not privilege—decide what happens. The simulated video contains no real surveillance data.</p>
+        </div>
+
+        <div class="app-shell">
+          <aside class="sidebar">
+            <div class="window-controls"><span></span><span></span><span></span></div>
+            <p class="side-label">CONTROL ROOM</p>
+            <button class="scenario active" data-scenario="standard"><span class="scenario-icon">01</span><span><b>Standard access</b><small>Authorized · Zone A</small></span></button>
+            <button class="scenario" data-scenario="denied"><span class="scenario-icon">02</span><span><b>Out-of-scope</b><small>Denied · Zone B</small></span></button>
+            <button class="scenario" data-scenario="override"><span class="scenario-icon">03</span><span><b>Admin override</b><small>Quorum required</small></span></button>
+            <div class="identity-card">
+              <span class="avatar" id="avatar">ML</span>
+              <span><b id="user-name">Maya Le</b><small id="user-role">Security operator</small></span>
+              <span class="verified" title="OIDC identity verified">✓</span>
+            </div>
+          </aside>
+
+          <div class="control-room">
+            <div class="room-head">
+              <div><p class="crumb">CITY OPERATIONS / LIVE CAMERAS</p><h3 id="scenario-title">Routine traffic investigation</h3></div>
+              <div class="health"><span></span> All 24 cameras encrypting</div>
+            </div>
+
+            <div class="demo-grid">
+              <div class="camera-panel">
+                <div class="camera-toolbar">
+                  <span id="camera-name">ZONE A · MARKET SQUARE</span><span class="encrypted"><i></i> E2EE · AES-256</span>
+                </div>
+                <div id="video" class="video encrypted-view" role="img" aria-label="Synthetic encrypted municipal camera feed">
+                  <div class="city-scene" aria-hidden="true">
+                    <div class="sky"></div><div class="building b1"></div><div class="building b2"></div><div class="building b3"></div><div class="road"></div><div class="car c1"></div><div class="car c2"></div><div class="scanlines"></div>
+                  </div>
+                  <div id="video-lock" class="video-lock"><div class="lock-glyph">⌁</div><b>Encrypted at source</b><span>Waiting for scoped decryption authority</span></div>
+                  <div class="feed-meta"><span id="timestamp">2026-10-22 17:14:06 ICT</span><span>CAM-A-014</span></div>
+                </div>
+                <div class="key-strip"><span class="key-icon">⌘</span><span><small>ACTIVE KEY</small><b id="key-value">No key material issued</b></span><span id="ttl" class="ttl">—</span></div>
+              </div>
+
+              <div class="request-panel">
+                <div class="panel-title"><span>Access request</span><span id="request-state" class="micro-badge neutral">Draft</span></div>
+                <label>Operator identity<input id="operator" value="Maya Le · Traffic Ops" readonly /></label>
+                <label>Incident ticket<input id="ticket" value="INC-2026-001" /></label>
+                <label>Camera scope<select id="camera"><option value="A">Zone A · Market Square</option><option value="B">Zone B · Civic Command</option></select></label>
+                <label>Time window<select id="window"><option>Last 15 minutes</option><option>Last 30 minutes</option></select></label>
+                <div class="policy-checks" aria-live="polite">
+                  <div><span id="check-id" class="check">✓</span><p><b>Identity</b><small>OIDC session + DPoP device proof</small></p></div>
+                  <div><span id="check-acl" class="check">✓</span><p><b>Camera ACL</b><small id="acl-copy">Traffic Ops → Zone A</small></p></div>
+                  <div><span id="check-purpose" class="check">✓</span><p><b>Purpose</b><small>Incident ticket required</small></p></div>
+                  <div><span id="check-quorum" class="check muted">—</span><p><b>Quorum</b><small id="quorum-copy">Not required for standard zone</small></p></div>
+                </div>
+                <button id="request-btn" class="primary-action">Request scoped access <span>→</span></button>
+                <button id="reset-btn" class="quiet-action">Reset demonstration</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture" class="architecture" aria-labelledby="arch-title">
+        <div class="section-heading narrow">
+          <div><p class="section-label">WHY TIDECLOAK MATTERS</p><h2 id="arch-title">The server stores video.<br />It never holds the power to reveal it.</h2></div>
+        </div>
+        <div class="flow-map">
+          <article><span>01</span><div class="flow-icon camera-i">●</div><h3>Camera edge</h3><p>Fragments are encrypted before leaving the device, tagged to one isolated camera scope.</p><small>SCOPED E2EE</small></article>
+          <div class="connector"><i></i><b>ciphertext</b></div>
+          <article><span>02</span><div class="flow-icon cloud-i">◇</div><h3>Blind cloud vault</h3><p>Infrastructure can store and serve encrypted fragments, but administrators cannot view them.</p><small>ZERO CUSTODY</small></article>
+          <div class="connector"><i></i><b>policy request</b></div>
+          <article class="accent-card"><span>03</span><div class="flow-icon tide-i">≋</div><h3>Tide authority</h3><p>Distributed nodes validate identity, policy, scope, and quorum before authority can emerge.</p><small>NO UNILATERAL CONTROL</small></article>
+          <div class="connector"><i></i><b>15m key</b></div>
+          <article><span>04</span><div class="flow-icon device-i">▣</div><h3>Bound device</h3><p>An ephemeral key works only on the requesting operator’s DPoP-bound device.</p><small>LOCAL DECRYPTION</small></article>
+        </div>
+        <div class="comparison">
+          <div><p class="section-label">CONVENTIONAL CCTV</p><h3>One compromise reveals the city.</h3><ul><li>Admin can bypass application rules</li><li>Central service holds reusable keys</li><li>Bearer tokens can be replayed</li></ul></div>
+          <div class="secure"><p class="section-label">CIVICSHIELD + TIDECLOAK</p><h3>Authority exists only for the request.</h3><ul><li>Policy is cryptographically enforced</li><li>Keys are scoped, brief, and distributed</li><li>DPoP binds authority to one device</li></ul></div>
+        </div>
+      </section>
+
+      <section id="audit" class="audit-section" aria-labelledby="audit-title">
+        <div class="section-heading">
+          <div><p class="section-label">ACCOUNTABILITY BY DEFAULT</p><h2 id="audit-title">Every decision leaves a receipt.</h2></div>
+          <p>Each event is chained to the one before it. Attempted overrides are evidence, not invisible exceptions.</p>
+        </div>
+        <div class="audit-card">
+          <div class="audit-head"><span>VERIFIABLE EVENT LOG</span><span class="chain-ok"><i></i> Chain integrity verified</span></div>
+          <div id="audit-list" class="audit-list" aria-live="polite">
+            <div class="audit-row"><time>17:12:41</time><span class="event-dot blue"></span><p><b>Camera fragment sealed</b><small>CAM-A-014 · Scope city/traffic/zone-a</small></p><code>8d7a…c41e</code></div>
+            <div class="audit-row"><time>17:10:03</time><span class="event-dot"></span><p><b>Policy manifest attested</b><small>Municipal CCTV policy · v2.4</small></p><code>2f91…a02b</code></div>
+            <div class="audit-row"><time>16:58:22</time><span class="event-dot"></span><p><b>Operator session verified</b><small>Maya Le · DPoP device bound</small></p><code>a0e3…19f7</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <p class="section-label">A SAFER PUBLIC REALM</p>
+        <h2>Protect the city.<br />Protect the people in it.</h2>
+        <p>The promise of public safety should not require blind trust in whoever holds the master password.</p>
+        <a class="pill-btn" href="#workspace">Run the three scenarios ↑</a>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="quorum-modal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button id="modal-close" class="modal-close" aria-label="Close">×</button>
+        <p class="section-label">EMERGENT AUTHORITY</p><h2 id="modal-title">No administrator can do this alone.</h2>
+        <p>A force-unlock request has been captured, not executed. Two independent approvals must align before a scoped key can exist.</p>
+        <div class="quorum-meter"><span id="meter-fill"></span></div><div class="meter-label"><b id="meter-count">0 of 2 approvals</b><span>Threshold · 2/3</span></div>
+        <div class="approvers">
+          <button data-approver="Security Director"><span class="approver-avatar">SD</span><span><b>Security Director</b><small>Independent keyholder</small></span><i>Approve</i></button>
+          <button data-approver="Civil Oversight"><span class="approver-avatar">CO</span><span><b>Civil Oversight</b><small>External representative</small></span><i>Approve</i></button>
+          <button data-approver="Privacy Officer"><span class="approver-avatar">PO</span><span><b>Privacy Officer</b><small>Policy council</small></span><i>Approve</i></button>
+        </div>
+        <button id="attempt-unlock" class="primary-action" disabled>Quorum not met · unlock blocked</button>
+        <p class="modal-foot">For the demo, select two independent approvers to simulate threshold signatures.</p>
+      </div>
+    </div>
+
+    <footer><a class="brand" href="#top"><span class="brand-mark"><i></i><i></i><i></i></span>CivicShield</a><span>RMIT UNLOCKED · Challenge 2 · 2026</span><span>Built with TideCloak</span></footer>
+  </body>
+</html>
