@@ -41,7 +41,7 @@ The app imports the official `@tidecloak/js` SDK in [src/main.js](src/main.js). 
 1. Run TideCloak and create a public OIDC client with this app's origin and redirect URIs.
 2. Copy `.env.example` to `.env`.
 3. Set `VITE_DEMO_MODE=false` and fill the realm URL, realm, and client ID.
-4. Restart `npm run dev` and use **Connect TideCloak**.
+4. Restart `npm run dev` and use **Sign in**.
 
 The on-screen 2-of-3 quorum interaction deliberately simulates remote approvals from distinct TideCloak sessions. In a live deployment, governed writes and approvals would use TideCloak QEA change requests and distinct enrolled approvers; cryptographic enforcement would not exist only in UI code.
 
