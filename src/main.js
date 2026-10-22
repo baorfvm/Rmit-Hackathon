@@ -203,7 +203,7 @@ initTideCloak();
 function runGuidedTour() {
   const caption = $('#tour-caption');
   const steps = [
-    { at: 0, no: '01', title: 'The possibility', copy: 'CivicShield gives investigators useful CCTV access without giving any administrator, cloud, or vendor a master key.', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+    { at: 0, no: '01', title: 'The possibility', copy: 'Kneyet gives investigators useful CCTV access without giving any administrator, cloud, or vendor a master key.', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
     { at: 12, no: '02', title: 'The trust constraint', copy: 'Today, one privileged account can bypass policy and expose an entire city. That makes centralised surveillance too powerful to trust.', action: () => $('#workspace').scrollIntoView({ behavior: 'smooth', block: 'start' }) },
     { at: 24, no: '03', title: 'Authorized access', copy: 'Maya presents an OIDC identity, incident purpose, Zone A scope, and a DPoP device proof. All four conditions align.', action: () => selectScenario('standard') },
     { at: 32, no: '04', title: 'A key for one context', copy: 'TideCloak releases a 15-minute ephemeral key bound to this camera and this device. The cloud still holds only ciphertext.', action: () => $('#request-btn').click() },

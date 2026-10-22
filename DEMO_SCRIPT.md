@@ -2,7 +2,7 @@
 
 ## 0:00–0:15 — The possibility
 
-“CivicShield is a municipal CCTV vault with no master key. It gives investigators useful access without giving any administrator, cloud, or vendor unilateral power over the city’s video.”
+“Kneyet is a municipal CCTV vault with no master key. It gives investigators useful access without giving any administrator, cloud, or vendor unilateral power over the city’s video.”
 
 Show the hero, then scroll to **Live prototype**.
 
@@ -22,7 +22,7 @@ Select **Out-of-scope**, then **Test policy boundary**.
 
 Select **Admin override**, then **Force unlock all cameras**.
 
-“A system administrator tries the classic god-mode shortcut. CivicShield denies unilateral access: the requesting admin cannot approve their own request. A separate Security Director approves from their TideCloak session, but the request remains blocked. Only after Civil Oversight independently approves from another session does authority emerge.”
+“A system administrator tries the classic god-mode shortcut. Kneyet denies unilateral access: the requesting admin cannot approve their own request. A separate Security Director approves from their TideCloak session, but the request remains blocked. Only after Civil Oversight independently approves from another session does authority emerge.”
 
 Use the demo controls to simulate two remote approvals arriving from the other administrators' separate devices, then issue the scoped key.
 

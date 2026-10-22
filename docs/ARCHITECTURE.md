@@ -1,4 +1,4 @@
-# CivicShield architecture
+# Kneyet architecture
 
 ## Trust boundary
 

@@ -1,4 +1,4 @@
-"""Build the captioned two-minute demo from verified CivicShield UI captures."""
+"""Build the captioned two-minute demo from verified Kneyet UI captures."""
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import imageio_ffmpeg
@@ -19,7 +19,7 @@ def cover(image):
     return image.crop((x, y, x + W, y + H))
 
 segments = [
-    (12, 'tmp-hero.png', '01  THE POSSIBILITY', 'Useful municipal CCTV access without a master key.', 'CivicShield protects public safety without giving an administrator, cloud, or vendor unilateral power over the city.'),
+    (12, 'tmp-hero.png', '01  THE POSSIBILITY', 'Useful municipal CCTV access without a master key.', 'Kneyet protects public safety without giving an administrator, cloud, or vendor unilateral power over the city.'),
     (12, 'tmp-architecture.png', '02  THE TRUST CONSTRAINT', 'One privileged account can expose everyone.', 'Conventional systems keep reusable authority in the backend. TideCloak keeps cryptographic authority outside any one server.'),
     (14, 'tmp-standard.png', '03  STANDARD REQUEST', 'Identity, purpose, scope, and time must align.', 'Maya presents an OIDC identity, incident ticket, Zone A ACL, time window, and DPoP device proof.'),
     (15, 'tmp-granted.png', '04  POLICY-APPROVED ACCESS', 'One camera. One device. Fifteen minutes.', 'TideCloak releases an ephemeral, device-bound key. Decryption happens locally; the cloud keeps only ciphertext.'),

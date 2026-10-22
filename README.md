@@ -1,11 +1,11 @@
-# CivicShield
+# Kneyet
 
-> Municipal CCTV access without a master key. CivicShield encrypts every feed at the camera and allows a temporary view only when identity, purpose, scope, and independent approval align.
+> Municipal CCTV access without a master key. Kneyet encrypts every feed at the camera and allows a temporary view only when identity, purpose, scope, and independent approval align.
 
 ## Project overview
 
 ### 1. Vision & originality
-CivicShield is a privacy-preserving municipal CCTV vault. Instead of trusting a “god-mode” account, it lets authority emerge for one justified request, one camera, one device, and one short time window.
+Kneyet is a privacy-preserving municipal CCTV vault. Instead of trusting a “god-mode” account, it lets authority emerge for one justified request, one camera, one device, and one short time window.
 
 ### 2. Trust constraint insight
 Cities need footage for public safety, but conventional systems give administrators or cloud services enough power to expose everyone. Removing unilateral control makes useful surveillance possible without requiring citizens to blindly trust a privileged operator.
