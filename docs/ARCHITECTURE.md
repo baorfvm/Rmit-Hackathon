@@ -24,6 +24,8 @@ The prototype treats application and storage infrastructure as potentially compr
 - QEA: governs sensitive role, scope, and policy changes through threshold approval.
 - IAAA: identification, authentication, authorization, and accountability across the complete request.
 
-## Production controls omitted from the prototype
+## Plan C simulation boundary
 
-The UI simulates camera footage, ciphertext, signatures, and audit hashes for a safe two-minute demonstration. A production system must use a provisioned TideCloak realm, server-verified tokens, real QEA change requests, protected audit storage, camera hardware roots of trust, key rotation, retention policies, and jurisdiction-specific privacy controls.
+Following Tide's Plan C guidance, the UI transparently simulates camera footage, ciphertext, signatures, separate administrator sessions, and audit hashes for a safe two-minute demonstration. This is the intended judging mode while live TideCloak infrastructure is under heavy load; it does not require a licence email or provisioned realm.
+
+A production deployment would replace the simulation boundary with a provisioned TideCloak realm, server-verified tokens, real QEA change requests, protected audit storage, camera hardware roots of trust, key rotation, retention policies, and jurisdiction-specific privacy controls.

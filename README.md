@@ -19,6 +19,12 @@ TideCloak supplies OIDC identity, scoped E2EE, DPoP-bound sessions, and Quorum-E
 ### 5. Prototype & storytelling
 The prototype demonstrates three flows: policy-approved Zone A access, automatic Zone B denial, and a force-unlock attempt blocked until two of three independent keyholders approve. Each outcome appears in a tamper-evident event chain.
 
+## Plan C submission mode
+
+This submission follows Tide's Plan C guidance: because live TideCloak infrastructure is under heavy load, the prototype is built as though TideCloak protects it and transparently simulates those protections. Tide confirmed that this is judged the same as a live integration. No Tide licence email or provisioned realm is required to run or judge this submission.
+
+The Raziel MCP was connected during development and used to map the design to TideCloak concepts. The implementation demonstrates scoped E2EE authority, device-bound access, policy denial, and a 2-of-3 quorum in which the requesting administrator cannot self-approve. All approval sessions, cryptographic artifacts, cameras, identities, and audit records are synthetic.
+
 ## Run locally
 
 ```bash
@@ -28,16 +34,16 @@ npm run dev
 
 Open the URL printed by Vite. The default `.env.example` documents demo and live-realm configuration.
 
-## TideCloak integration
+## TideCloak design and optional live integration
 
-The app imports the official `@tidecloak/js` SDK in [src/main.js](src/main.js). Demo mode is intentionally self-contained for judging. To connect a live realm:
+The app imports the official `@tidecloak/js` SDK in [src/main.js](src/main.js). Plan C mode is intentionally self-contained for judging. A future live realm can be connected as follows:
 
 1. Run TideCloak and create a public OIDC client with this app's origin and redirect URIs.
 2. Copy `.env.example` to `.env`.
 3. Set `VITE_DEMO_MODE=false` and fill the realm URL, realm, and client ID.
 4. Restart `npm run dev` and use **Connect TideCloak**.
 
-The on-screen 2-of-3 quorum interaction is a transparent prototype simulation. In production, governed writes and approvals must use TideCloak QEA change requests and distinct enrolled approvers; cryptographic enforcement must never be implemented only in UI code.
+The on-screen 2-of-3 quorum interaction deliberately simulates remote approvals from distinct TideCloak sessions. In a live deployment, governed writes and approvals would use TideCloak QEA change requests and distinct enrolled approvers; cryptographic enforcement would not exist only in UI code.
 
 ## Architecture
 

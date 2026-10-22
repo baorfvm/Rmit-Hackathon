@@ -152,7 +152,7 @@ async function initTideCloak() {
 
 $('#login-btn').addEventListener('click', async () => {
   if (iam?.login) await iam.login();
-  else flash('Demo realm active. Add .env credentials to connect a live TideCloak realm.');
+  else flash('Plan C mode: TideCloak protections are transparently simulated for this prototype.');
 });
 
 $$('.scenario').forEach((button) => button.addEventListener('click', () => selectScenario(button.dataset.scenario)));
